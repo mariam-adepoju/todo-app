@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todos - Todo App</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <main class="container">
+
+        <header>
+            <h1>My Todos</h1>
+
+            <p>
+                Welcome,
+                <strong>
+                    <%= user.username %>
+                </strong>
+            </p>
+
+            <nav>
+                <a href="/todos/create">Create Todo</a>
+
+                <form action="/auth/logout" method="post" style="display: inline; padding: 0; margin: 0;">
+                    <button type="submit">Logout</button>
+                </form>
+            </nav>
+        </header>
+
+        <section>
+            <h2>Todo List</h2>
+
+            <form action="/todos" method="get">
+                <div class="form-group">
+                    <label for="status">Filter</label>
+
+                    <select id="status" name="status" onchange="this.form.submit()">
+                        <option value="all" <%=currentFilter==='all' ? 'selected' : '' %>
+                            >
+                            All
+                        </option>
+
+                        <option value="pending" <%=currentFilter==='pending' ? 'selected' : '' %>
+                            >
+                            Pending
+                        </option>
+
+                        <option value="completed" <%=currentFilter==='completed' ? 'selected' : '' %>
+                            >
+                            Completed
+                        </option>
+                    </select>
+                </div>
+            </form>
+
+            <% if (todos.length===0) { %>
+
+                <% if (currentFilter==='all' ) { %>
+                    <p>You don't have any todos yet.</p>
+                    <a href="/todos/create">Create your first todo</a>
+                    <% } else { %>
+                        <p>
+                            You don't have any
+                            <%= currentFilter %>
+                                todos yet.
+                        </p>
+                        <% } %>
+
+                            <% } else { %>
+
+                                <% todos.forEach(todo=> { %>
+
+                                    <article class="todo">
+                                        <h3>
+                                            <%= todo.title %>
+                                        </h3>
+
+                                        <% if (todo.description) { %>
+                                            <p>
+                                                <%= todo.description %>
+                                            </p>
+                                            <% } %>
+
+                                                <p>
+                                                    <strong>Status:</strong>
+                                                    <span class="status">
+                                                        <%= todo.status %>
+                                                    </span>
+                                                </p>
+
+                                                <form action="/todos/<%= todo._id %>/status" method="post">
+                                                    <div class="form-group">
+                                                        <label for="status-<%= todo._id %>">
+                                                            Update status
+                                                        </label>
+
+                                                        <select id="status-<%= todo._id %>" name="status">
+                                                            <option value="pending" <%=todo.status==='pending'
+                                                                ? 'selected' : '' %>
+                                                                >
+                                                                Pending
+                                                            </option>
+
+                                                            <option value="completed" <%=todo.status==='completed'
+                                                                ? 'selected' : '' %>
+                                                                >
+                                                                Completed
+                                                            </option>
+
+                                                            <option value="deleted">
+                                                                Deleted
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <button type="submit">
+                                                        Update Status
+                                                    </button>
+                                                </form>
+                                    </article>
+
+                                    <% }) %>
+
+                                        <% } %>
+        </section>
+
+    </main>
+</body>
+
+</html>

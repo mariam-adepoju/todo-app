@@ -1,0 +1,38 @@
+{
+  "name": "todo-backend",
+  "version": "1.0.0",
+  "description": "backend for todo app",
+  "keywords": [
+    "todo",
+    "auth",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "mariam",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.9.3",
+    "morgan": "^1.11.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "mongodb-memory-server": "^11.2.0",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2"
+  }
+}
