@@ -1,7 +1,7 @@
 const request = require('supertest');
 const createTestApp = require('../helpers/createTestApp');
-const UserModel = require('../../src/modules/user/user.model');
-const TodoModel = require('../../src/modules/todo/todo.model');
+const UserModel = require('../../modules/user/user.model');
+const TodoModel = require('../../modules/todo/todo.model');
 const app = createTestApp();
 describe('Todo routes', () => {
     let agent;

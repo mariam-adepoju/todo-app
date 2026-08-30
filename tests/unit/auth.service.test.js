@@ -1,6 +1,6 @@
-jest.mock('../../src/modules/user/user.model');
-const UserModel = require('../../src/modules/user/user.model');
-const { signupUser, loginUser } = require('../../src/modules/auth/auth.service');
+jest.mock('../../modules/user/user.model');
+const UserModel = require('../../modules/user/user.model');
+const { signupUser, loginUser } = require('../../modules/auth/auth.service');
 
 describe('Auth Service', () => {
     beforeEach(() => { jest.resetAllMocks() });

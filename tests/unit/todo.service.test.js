@@ -1,6 +1,6 @@
-jest.mock('../../src/modules/todo/todo.model');
-const TaskModel = require('../../src/modules/todo/todo.model');
-const { createTodoForUser, updateTodoStatusForUser } = require('../../src/modules/todo/todo.service');
+jest.mock('../../modules/todo/todo.model');
+const TaskModel = require('../../modules/todo/todo.model');
+const { createTodoForUser, updateTodoStatusForUser } = require('../../modules/todo/todo.service');
 
 describe('Todo Service', () => {
     beforeEach(() => { jest.resetAllMocks() });

@@ -1,6 +1,6 @@
 const request = require('supertest');
 const createTestApp = require('../helpers/createTestApp');
-const UserModel = require('../../src/modules/user/user.model');
+const UserModel = require('../../modules/user/user.model');
 
 const app = createTestApp();
 

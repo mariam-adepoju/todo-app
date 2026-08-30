@@ -1,5 +1,5 @@
 const session = require('express-session');
-const createApp = require('../../src/app');
+const createApp = require('../../app');
 
 const createTestApp = () => {
     const sessionMiddleware = session({

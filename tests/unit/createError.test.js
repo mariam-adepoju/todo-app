@@ -1,4 +1,4 @@
-const createError = require('../../src/utils/createError');
+const createError = require('../../utils/createError');
 
 describe('createError', () => {
     it('should create an error with message and status code', () => {
