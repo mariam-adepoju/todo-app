@@ -38,96 +38,74 @@
                     <label for="status">Filter</label>
 
                     <select id="status" name="status" onchange="this.form.submit()">
-                        <option value="all" <%=currentFilter==='all' ? 'selected' : '' %>
-                            >
-                            All
-                        </option>
-
-                        <option value="pending" <%=currentFilter==='pending' ? 'selected' : '' %>
-                            >
-                            Pending
-                        </option>
-
-                        <option value="completed" <%=currentFilter==='completed' ? 'selected' : '' %>
-                            >
-                            Completed
-                        </option>
+                        <option value="all" <%= currentFilter === 'all' ? 'selected' : '' %>>All</option>
+                        <option value="pending" <%= currentFilter === 'pending' ? 'selected' : '' %>>Pending</option>
+                        <option value="overdue" <%= currentFilter === 'overdue' ? 'selected' : '' %>>Overdue</option>
+                        <option value="completed" <%= currentFilter === 'completed' ? 'selected' : '' %>>Completed</option>
                     </select>
                 </div>
             </form>
 
-            <% if (todos.length===0) { %>
+            <% if (todos.length === 0) { %>
 
-                <% if (currentFilter==='all' ) { %>
+                <% if (currentFilter === 'all') { %>
                     <p>You don't have any todos yet.</p>
                     <a href="/todos/create">Create your first todo</a>
-                    <% } else { %>
-                        <p>
-                            You don't have any
-                            <%= currentFilter %>
-                                todos yet.
-                        </p>
+                <% } else { %>
+                    <p>You don't have any <%= currentFilter %> todos yet.</p>
+                <% } %>
+
+            <% } else { %>
+
+                <% todos.forEach(todo => { %>
+                    <% const expired = todo.dueDate && new Date(todo.dueDate) <= new Date(); %>
+
+                    <article class="todo" data-todo-id="<%= todo._id %>">
+                        <h3><%= todo.title %></h3>
+
+                        <% if (todo.description) { %>
+                            <p><%= todo.description %></p>
                         <% } %>
 
-                            <% } else { %>
+                        <% if (todo.dueDate) { %>
+                            <p>
+                                <strong>Due:</strong>
+                                <time datetime="<%= todo.dueDate.toISOString() %>"><%= todo.dueDate.toUTCString() %></time>
+                            </p>
+                        <% } %>
 
-                                <% todos.forEach(todo=> { %>
+                        <p>
+                            <strong>Status:</strong>
+                            <span class="status status-<%= todo.status %>"><%= todo.status %></span>
+                        </p>
 
-                                    <article class="todo">
-                                        <h3>
-                                            <%= todo.title %>
-                                        </h3>
+                        <form action="/todos/<%= todo._id %>/status" method="post">
+                            <div class="form-group">
+                                <label for="status-<%= todo._id %>">Update status</label>
 
-                                        <% if (todo.description) { %>
-                                            <p>
-                                                <%= todo.description %>
-                                            </p>
-                                            <% } %>
+                                <select id="status-<%= todo._id %>" name="status" <%= todo.status === 'overdue' ? 'required' : '' %>>
+                                    <% if (todo.status === 'overdue') { %>
+                                        <option value="" disabled selected>Overdue - choose action</option>
+                                    <% } else if (!expired) { %>
+                                        <option value="pending" <%= todo.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                    <% } %>
 
-                                                <p>
-                                                    <strong>Status:</strong>
-                                                    <span class="status">
-                                                        <%= todo.status %>
-                                                    </span>
-                                                </p>
+                                    <option value="completed" <%= todo.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                                    <option value="deleted">Deleted</option>
+                                </select>
+                            </div>
 
-                                                <form action="/todos/<%= todo._id %>/status" method="post">
-                                                    <div class="form-group">
-                                                        <label for="status-<%= todo._id %>">
-                                                            Update status
-                                                        </label>
+                            <button type="submit">Update Status</button>
+                        </form>
+                    </article>
 
-                                                        <select id="status-<%= todo._id %>" name="status">
-                                                            <option value="pending" <%=todo.status==='pending'
-                                                                ? 'selected' : '' %>
-                                                                >
-                                                                Pending
-                                                            </option>
+                <% }) %>
 
-                                                            <option value="completed" <%=todo.status==='completed'
-                                                                ? 'selected' : '' %>
-                                                                >
-                                                                Completed
-                                                            </option>
-
-                                                            <option value="deleted">
-                                                                Deleted
-                                                            </option>
-                                                        </select>
-                                                    </div>
-
-                                                    <button type="submit">
-                                                        Update Status
-                                                    </button>
-                                                </form>
-                                    </article>
-
-                                    <% }) %>
-
-                                        <% } %>
+            <% } %>
         </section>
 
     </main>
+    <script src="/notifications.js" defer></script>
 </body>
 
 </html>

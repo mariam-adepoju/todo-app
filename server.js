@@ -4,6 +4,8 @@ const { MongoStore } = require('connect-mongo');
 const createApp = require('./app')
 const connectDB = require('./config/db');
 const logger = require('./utils/logger');
+const { initWebSocket } = require('./modules/notification/websocket');
+const { startOverdueJob } = require('./modules/todo/overdue.job');
 
 const PORT = process.env.PORT || 5000
 
@@ -35,6 +37,10 @@ const startServer = async () => {
             logger.error("Server error", error);
             process.exit(1);
         });
+
+        // Real-time notifications (JWT-authenticated WebSocket) + overdue checker
+        initWebSocket(server);
+        startOverdueJob();
     } catch (error) {
         logger.error("Application startup failed", error);
         process.exit(1);

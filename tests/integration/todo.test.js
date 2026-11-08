@@ -27,13 +27,15 @@ describe('Todo routes', () => {
                 .post('/todos')
                 .send({
                     title: 'Learn Jest',
-                    description: 'Write automated tests'
+                    description: 'Write automated tests',
+                    dueDate: new Date(Date.now() + 60 * 60 * 1000).toISOString()
                 });
             expect(response.statusCode).toBe(302);
             expect(response.headers.location).toBe('/todos');
 
             const todo = await TodoModel.findOne({ title: 'Learn Jest' });
             expect(todo).not.toBeNull();
+            expect(todo.dueDate).toBeInstanceOf(Date);
             expect(todo.description).toBe('Write automated tests');
             expect(todo.user.toString()).toBe(user._id.toString());
             expect(todo.status).toBe('pending');

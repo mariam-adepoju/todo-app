@@ -112,3 +112,7 @@ button:hover {
   max-width: 420px;
   margin: 60px auto;
 }
+
+/* Task states */
+.status-overdue { color: #c0392b; font-weight: bold; }
+.status-completed { color: #27ae60; }

@@ -16,8 +16,17 @@ const todoSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'completed', 'deleted'],
+        enum: ['pending', 'completed', 'deleted', 'overdue'],
         default: 'pending'
+    },
+    // Required for new tasks by todo.service (kept optional here so older tasks still load)
+    dueDate: {
+        type: Date,
+        index: true
+    },
+    overdueNotifiedAt: {
+        type: Date,
+        default: null
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

@@ -18,7 +18,7 @@
       </nav>
     </header>
 
-    <form action="/todos" method="post">
+    <form action="/todos" method="post" id="create-form">
       <div class="form-group">
         <label for="title">Title</label>
         <input type="text" id="title" name="title" placeholder="Enter todo title" required minlength="1"
@@ -31,9 +31,34 @@
           required></textarea>
       </div>
 
+      <div class="form-group">
+        <label for="dueDateLocal">Due date</label>
+        <input type="datetime-local" id="dueDateLocal" required>
+        <!-- Sent to the server as a UTC ISO string so timezones never get mixed up -->
+        <input type="hidden" id="dueDate" name="dueDate">
+      </div>
+
       <button type="submit">Create Todo</button>
     </form>
   </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById('create-form');
+      var local = document.getElementById('dueDateLocal');
+      var hidden = document.getElementById('dueDate');
+      var pad = function (n) { return String(n).padStart(2, '0'); };
+
+      var now = new Date();
+      local.min = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) +
+        'T' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+      form.addEventListener('submit', function () {
+        hidden.value = new Date(local.value).toISOString();
+      });
+    })();
+  </script>
+  <script src="/notifications.js" defer></script>
 </body>
 
 </html>

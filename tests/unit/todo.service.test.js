@@ -26,11 +26,43 @@ describe('Todo Service', () => {
             expect(TaskModel.create).not.toHaveBeenCalled();
         });
 
+        it('should throw an error when due date is missing', async () => {
+            await expect(
+                createTodoForUser('user123', 'Test Todo', 'Test description')
+            ).rejects.toMatchObject({
+                message: 'Task due date is required',
+                statusCode: 400
+            });
+            expect(TaskModel.create).not.toHaveBeenCalled();
+        });
+
+        it('should throw an error when due date is invalid', async () => {
+            await expect(
+                createTodoForUser('user123', 'Test Todo', 'Test description', 'not-a-date')
+            ).rejects.toMatchObject({
+                message: 'Task due date is invalid',
+                statusCode: 400
+            });
+        });
+
+        it('should throw an error when due date is in the past', async () => {
+            const past = new Date(Date.now() - 60 * 1000).toISOString();
+            await expect(
+                createTodoForUser('user123', 'Test Todo', 'Test description', past)
+            ).rejects.toMatchObject({
+                message: 'Task due date must be in the future',
+                statusCode: 400
+            });
+            expect(TaskModel.create).not.toHaveBeenCalled();
+        });
+
         it('should create a todo successfully', async () => {
+            const dueDate = new Date(Date.now() + 60 * 60 * 1000);
             const mockTodo = {
                 _id: 'todo123',
                 title: 'Learn Jest',
                 description: 'Write tests',
+                dueDate,
                 user: 'user123',
                 status: 'pending'
             };
@@ -38,12 +70,14 @@ describe('Todo Service', () => {
             const result = await createTodoForUser(
                 'user123',
                 '  Learn Jest  ',
-                '  Write tests  '
+                '  Write tests  ',
+                dueDate.toISOString()
             );
 
             expect(TaskModel.create).toHaveBeenCalledWith({
                 title: 'Learn Jest',
                 description: 'Write tests',
+                dueDate,
                 user: 'user123'
             });
             expect(result).toEqual(mockTodo);
